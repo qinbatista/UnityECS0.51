@@ -5,3 +5,6 @@
 5: Entities.ForEach.Schedule() will cause error if real time functions used like Time.deltaTime is used.
 6: How many time left from previews frames
 7: Entities.ForEach.Run() is on main thread
+8: Entities.ForEach( in xx..) in means don't write data
+9: quaternion.LookRotationSafe(direction, rotating direction)  is used to rotate object
+10: math.slerp(start rotation, end rotation, slerp parameter(0-1))
