@@ -8,7 +8,10 @@ public partial class MoveForwardSystem : SystemBase
     protected override void OnUpdate()
     {
         float deltaTime = Time.DeltaTime;
-        Entities.ForEach((ref Translation pos, in MoveData moveData, in Rotation rotation)=>
+        Entities.
+        WithAll<AsteroidTag>().
+        WithNone<PlayerTag>().
+        ForEach((ref Translation pos, in MoveData moveData, in Rotation rotation)=>
         {
             float3 forwardDirection = math.forward(rotation.Value);
             pos.Value += forwardDirection * moveData.speed * deltaTime;

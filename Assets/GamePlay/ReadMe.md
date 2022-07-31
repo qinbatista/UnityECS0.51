@@ -8,3 +8,4 @@
 8: Entities.ForEach( in xx..) in means don't write data
 9: quaternion.LookRotationSafe(direction, rotating direction)  is used to rotate object
 10: math.slerp(start rotation, end rotation, slerp parameter(0-1))
+11: Entities.WithAll, WithNone, WithAny; all entities have this component. no entities have this component, any entities have this component.

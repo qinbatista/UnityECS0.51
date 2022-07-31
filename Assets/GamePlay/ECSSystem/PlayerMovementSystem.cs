@@ -8,7 +8,9 @@ public partial class PlayerMovementSystem : SystemBase
     protected override void OnUpdate()
     {
         float deltaTime = Time.DeltaTime;
-        Entities.ForEach((ref Translation pos, in MoveData moveData)=>
+        Entities.
+        WithAny<PlayerTag>().
+        ForEach((ref Translation pos, in MoveData moveData)=>
         {
             float3 normalizedDir = math.normalizesafe(moveData.direction);
             pos.Value+= normalizedDir * moveData.speed * deltaTime;
