@@ -3,6 +3,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
+[UpdateAfter(typeof(TransformSystemGroup))]
 public partial class FaceDirectionSystem : SystemBase
 {
     protected override void OnUpdate()
