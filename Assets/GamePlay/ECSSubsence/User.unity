@@ -284,7 +284,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentValue: 0
-  isDead: 1
+  isDead: 0
 --- !u!1 &1920963362
 GameObject:
   m_ObjectHideFlags: 0

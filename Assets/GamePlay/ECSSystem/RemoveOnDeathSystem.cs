@@ -21,19 +21,34 @@ public partial class RemoveOnDeathSystem : SystemBase
         EntityCommandBuffer entityCommandBuffer = commandBufferSystem.CreateCommandBuffer();
 
         Entities.
-            WithAll<PlayerTag>().
-            ForEach((Entity entity, in HealthData healthData) =>
+        WithAll<ChaserTag>().
+        ForEach((Entity entity, in HealthData healthData) =>
+        {
+            if(entity==Entity.Null|| entity.Index == 0)
             {
-                if(entity==Entity.Null|| entity.Index == 0)
-                {
-                    return;
-                }
-                if (healthData.isDead)
-                {
-                    entityCommandBuffer.DestroyEntity(entity);
-                }
+                return;
+            }
+            if (healthData.isDead)
+            {
+                entityCommandBuffer.DestroyEntity(entity);
+            }
 
-            }).Schedule();
+        }).Schedule();
+
+        Entities.
+        WithAll<PlayerTag>().
+        ForEach((Entity entity, in HealthData healthData) =>
+        {
+            if(entity==Entity.Null|| entity.Index == 0)
+            {
+                return;
+            }
+            if (healthData.isDead)
+            {
+                entityCommandBuffer.DestroyEntity(entity);
+            }
+
+        }).Schedule();
 
         commandBufferSystem.AddJobHandleForProducer(this.Dependency);
     }
