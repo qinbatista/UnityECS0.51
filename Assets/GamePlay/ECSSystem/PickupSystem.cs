@@ -14,22 +14,27 @@ public partial class PickOnTriggerSystem : SystemBase
 {
     private BuildPhysicsWorld buildPhysicsWorld;
     private StepPhysicsWorld stepPhysicsWorld;
+    EndSimulationEntityCommandBufferSystem commandBufferSystem;
     protected override void OnCreate()
     {
         buildPhysicsWorld = World.GetOrCreateSystem<BuildPhysicsWorld>();
         stepPhysicsWorld = World.GetOrCreateSystem<StepPhysicsWorld>();
+        commandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
     }
     // [BurstCompile]
     struct PickupOnTriggerSystemJob : ITriggerEventsJob
     {
         [ReadOnly] public ComponentDataFromEntity<PickupTag> allPickups;
         [ReadOnly] public ComponentDataFromEntity<PlayerTag> allPlayers;
+        public EntityCommandBuffer entityCommandBuffer;
         public void Execute(TriggerEvent triggerEvent)
         {
             Entity entityA = triggerEvent.EntityA;
             Entity entityB = triggerEvent.EntityB;
             if (allPickups.HasComponent(entityA) && allPlayers.HasComponent(entityB))
             {
+                entityCommandBuffer.DestroyEntity(entityA);
+                UnityEngine.Debug.Log("This:" + entityA + " Other:" + entityB);
                 return;
             }
             if (allPickups.HasComponent(entityA) && allPlayers.HasComponent(entityB))
@@ -47,10 +52,11 @@ public partial class PickOnTriggerSystem : SystemBase
         PickupOnTriggerSystemJob triggerJob = new PickupOnTriggerSystemJob()
         {
             allPickups = GetComponentDataFromEntity<PickupTag>(true),
-            allPlayers = GetComponentDataFromEntity<PlayerTag>(true)
+            allPlayers = GetComponentDataFromEntity<PlayerTag>(true),
+            entityCommandBuffer = commandBufferSystem.CreateCommandBuffer()
         };
         Dependency = triggerJob.Schedule(stepPhysicsWorld.Simulation, Dependency);
-
+        commandBufferSystem.AddJobHandleForProducer(Dependency);
 
         // Entities.
         // WithAll<PickupTag>().
