@@ -22,8 +22,16 @@ public partial class TargetToDirectionSystem : SystemBase
             Translation targetPos = allTranslations[targetData.targetEntity];
             float3 dirToTarget = targetPos.Value - pos.Value;
             moveData.direction = dirToTarget;
-            // FaceDirection(ref rotation, moveData);
+            FaceDirection(ref rotation, moveData);
             // rotation += normalizedDir * moveData.speed * deltaTime;
         }).Run();
+    }
+    private static void FaceDirection(ref Rotation rotation, MoveData moveData)
+    {
+        if (!moveData.direction.Equals(float3.zero))
+        {
+            quaternion targetRotation = quaternion.LookRotationSafe(moveData.direction, math.up());
+            rotation.Value = math.slerp(rotation.Value, targetRotation, moveData.turnSpeed);
+        }
     }
 }

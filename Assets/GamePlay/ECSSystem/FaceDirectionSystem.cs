@@ -8,11 +8,12 @@ public partial class FaceDirectionSystem : SystemBase
     protected override void OnUpdate()
     {
         Entities.
+        WithAll<PlayerTag>().
         ForEach((ref Rotation rotation, in Translation pos, in MoveData moveData) =>
         {
             FaceDirection(ref rotation, moveData);
+            // rotation += normalizedDir * moveData.speed * deltaTime;
         }).Schedule();
-
     }
     private static void FaceDirection(ref Rotation rotation, MoveData moveData)
     {
