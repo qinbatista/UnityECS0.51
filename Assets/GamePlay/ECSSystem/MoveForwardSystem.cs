@@ -11,10 +11,20 @@ public partial class MoveForwardSystem : SystemBase
         Entities.
         WithAll<AsteroidTag>().
         WithNone<PlayerTag>().
-        ForEach((ref Translation pos, in MoveData moveData, in Rotation rotation)=>
+        ForEach((ref Translation pos, in MoveData moveData, in Rotation rotation) =>
         {
             float3 forwardDirection = math.forward(rotation.Value);
             pos.Value += forwardDirection * moveData.speed * deltaTime;
-        }).Run();
+        }).ScheduleParallel();
+
+
+        Entities.
+        WithAll<ChaserTag>().
+        WithNone<PlayerTag>().
+        ForEach((ref Translation pos, in MoveData moveData, in Rotation rotation) =>
+        {
+            float3 forwardDirection = math.forward(rotation.Value);
+            pos.Value += forwardDirection * moveData.speed * deltaTime;
+        }).ScheduleParallel();
     }
 }
